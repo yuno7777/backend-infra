@@ -3,13 +3,17 @@ from __future__ import annotations
 import contextlib
 import time
 
-import structlog
 from fastapi import FastAPI, status
 from fastapi.responses import JSONResponse
 from sqlalchemy import text
 
+from backend.app.api.routes import api_router
 from backend.app.core.config import Settings, get_settings
-from backend.app.core.errors import BodySizeLimitMiddleware, RequestIdMiddleware, register_error_handlers
+from backend.app.core.errors import (
+    BodySizeLimitMiddleware,
+    RequestIdMiddleware,
+    register_error_handlers,
+)
 from backend.app.core.logging import configure_logging
 from backend.app.db import engine as db_engine
 
@@ -65,6 +69,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.add_middleware(RequestIdMiddleware)
 
     build_health_router(app)
+    app.include_router(api_router)
     register_error_handlers(app)
     return app
 

@@ -29,9 +29,9 @@ async def test_ready_ok_with_database(app_client):
 
 
 async def test_ready_503_when_database_unreachable():
-    from backend.app.main import create_app
-
     import httpx
+
+    from backend.app.main import create_app
 
     dead_settings = Settings(database_url="postgresql+psycopg://backend_infra:x@127.0.0.1:59999/backend_infra")
     app = create_app(settings=dead_settings)

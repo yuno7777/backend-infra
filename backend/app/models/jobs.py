@@ -53,7 +53,7 @@ class Job(UUIDPk, TimestampMixin, Base):
         UUID(as_uuid=True), ForeignKey("idempotency_keys.id"), nullable=True, unique=True
     )
 
-    attempts_rows: Mapped[list["JobAttempt"]] = relationship(back_populates="job", cascade="all, delete-orphan")
+    attempts_rows: Mapped[list[JobAttempt]] = relationship(back_populates="job", cascade="all, delete-orphan")
 
 
 class JobAttempt(Base):
@@ -73,4 +73,4 @@ class JobAttempt(Base):
     error_code: Mapped[str | None] = mapped_column(String(64), nullable=True)
     error_detail: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
 
-    job: Mapped["Job"] = relationship(back_populates="attempts_rows")
+    job: Mapped[Job] = relationship(back_populates="attempts_rows")

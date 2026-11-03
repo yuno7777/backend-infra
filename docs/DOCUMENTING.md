@@ -77,9 +77,9 @@ Business rules live in `services/`/`domain/`; routers stay thin; repositories ow
 | Phase | Scope | Status |
 |---|---|---|
 | 0 Reconnaissance | env report, stack constraints, ADR seeds | **Verified** (recorded above) |
-| 1 Architecture & requirements | scope, API draft, state machine, ADRs, plan | **In progress** |
-| 2 App foundation | settings, startup, DB, migrations, errors, logging, health | Not started |
-| 3 Identity & access | registration/login, sessions, API keys, memberships, tenant isolation, audit | Not started |
+| 1 Architecture & requirements | scope, API draft, state machine, ADRs, plan | **Implemented** |
+| 2 App foundation | settings, startup, DB, migrations, errors, logging, health | **Implemented; tests pass** |
+| 3 Identity & access | registration/login, sessions, API keys, memberships, tenant isolation, audit | **Implemented; tests pass** |
 | 4 Durable jobs | submission, worker, retries, timeout, cancellation, recovery, report workload | Not started |
 | 5 Idempotency & reliability | idempotency keys, enqueue/commit semantics | Not started |
 | 6 Limits & webhooks | rate limiting, signed webhooks + delivery history | Not started |
@@ -90,16 +90,18 @@ Business rules live in `services/`/`domain/`; routers stay thin; repositories ow
 
 (Only list what code does today.)
 
-- [ ] (none yet)
+- [x] Versioned health/readiness endpoints, request IDs, consistent error envelope, request-size limit.
+- [x] User registration/login/logout, bearer sessions, API keys, workspace membership and role checks.
+- [x] Workspace-scoped access for session and API-key principals; audit records for identity actions.
 
 ## 8. Schema/migration history & important ADRs
 
 - ADR-001 queue choice; ADR-002 no Redis; ADR-003 portable Postgres (see `docs/decisions/`).
-- Migrations: none applied yet.
+- Migrations: initial schema migration is present and applied by the test fixture.
 
 ## 9. Bugs, root causes, resolutions
 
-- None yet (to be kept chronologically; include any data repair performed).
+- `require_role` initially used an `Annotated` dependency alias as a default value; FastAPI passed the alias object at runtime. Replaced it with `Depends(get_workspace_context)`; full suite passes.
 
 ## 10. Verification log (exact commands + outcomes)
 
@@ -118,4 +120,5 @@ Append-only. Format: date — command — outcome.
 ## 12. Next actions & current blocker
 
 - Next: finish Phase 1 docs/ADRs → Phase 2 foundation code → apply initial migration → first API tests.
-- Blocker: none (Postgres binaries download in flight for the local dev cluster).
+- Next: implement and verify the durable job/report workload (Phase 4), then idempotency and delivery reliability.
+- Blocker: no current blocker for the verified foundation/auth slice. Docker/Compose integration remains unverified on this host.

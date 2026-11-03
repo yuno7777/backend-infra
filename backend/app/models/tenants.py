@@ -38,7 +38,7 @@ class User(UUIDPk, TimestampMixin, Base):
     password_hash: Mapped[str | None] = mapped_column(String(256), nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
 
-    memberships: Mapped[list["Membership"]] = relationship(back_populates="user")
+    memberships: Mapped[list[Membership]] = relationship(back_populates="user")
 
 
 class Workspace(UUIDPk, TimestampMixin, Base):
@@ -47,7 +47,7 @@ class Workspace(UUIDPk, TimestampMixin, Base):
     name: Mapped[str] = mapped_column(String(120), nullable=False)
     created_by: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
 
-    memberships: Mapped[list["Membership"]] = relationship(back_populates="workspace")
+    memberships: Mapped[list[Membership]] = relationship(back_populates="workspace")
 
 
 class Membership(UUIDPk, TimestampMixin, Base):
@@ -61,5 +61,5 @@ class Membership(UUIDPk, TimestampMixin, Base):
     user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
     role: Mapped[Role] = mapped_column(nullable=False)
 
-    workspace: Mapped["Workspace"] = relationship(back_populates="memberships")
-    user: Mapped["User"] = relationship(back_populates="memberships")
+    workspace: Mapped[Workspace] = relationship(back_populates="memberships")
+    user: Mapped[User] = relationship(back_populates="memberships")

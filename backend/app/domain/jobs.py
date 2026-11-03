@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import enum
 import random
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 
 class InvalidJobTransition(Exception):
@@ -67,5 +67,5 @@ def backoff_delay_seconds(attempt: int, *, cap: float = 60.0, rnd: random.Random
 
 
 def backoff_deadline(attempt: int, now: datetime | None = None, *, rnd: random.Random | None = None) -> datetime:
-    now = now or datetime.now(timezone.utc)
+    now = now or datetime.now(UTC)
     return now + timedelta(seconds=backoff_delay_seconds(attempt, rnd=rnd))

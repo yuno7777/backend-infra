@@ -109,7 +109,7 @@ def register_error_handlers(app: FastAPI) -> None:
     @app.exception_handler(RequestValidationError)
     async def _validation_error(request: Request, exc: RequestValidationError):
         details = jsonable_encoder(exc.errors(), custom_encoder={})
-        err = AppError("validation_error", "Request validation failed.", status.HTTP_422_UNPROCESSABLE_ENTITY, details=details)
+        err = AppError("validation_error", "Request validation failed.", status.HTTP_422_UNPROCESSABLE_CONTENT, details=details)
         return error_response(request, err)
 
     @app.exception_handler(status.HTTP_413_CONTENT_TOO_LARGE)

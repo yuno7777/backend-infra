@@ -21,7 +21,7 @@ class Session(UUIDPk, TimestampMixin, Base):
     expires_at: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     revoked_at: Mapped[datetime.datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
-    user: Mapped["User"] = relationship(lazy="joined")  # noqa: F821
+    user: Mapped[User] = relationship(lazy="joined")  # noqa: F821
 
 
 class ApiKey(UUIDPk, TimestampMixin, Base):
