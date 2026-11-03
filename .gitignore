@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+
+# Local runtime data (never commit)
+local/
+data/
+*.log
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Load-test output outside versioned benchmarks
+benchmarks/local-*/
